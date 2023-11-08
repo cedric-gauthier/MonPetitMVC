@@ -25,7 +25,7 @@ try {
    include(PATH_VIEW . 'errors\error.html');
 } catch (AppException $ex) {
     include(PATH_VIEW . 'errors\error.html'); 
-    MyTwig::afficheVue('errors\error.html', $error) ;   
+    MyTwig::afficheVue('errors\error.html', $error);
 } catch (Exception $ex) {
      include(PATH_VIEW . 'errors\error.html');
 } 
