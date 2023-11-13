@@ -1,0 +1,26 @@
+{% extends "layout.html.twig" %}
+{%  block contenu %}
+    {% if unClient %}
+        {% set idClient = unClient.getId() %}
+    {% endif %}
+    {% block recherche %}
+        {% include 'recherche.html.twig' %}
+    {% endblock %}
+    {% if unClient %}
+
+
+        <p><h2> Informations du client numéro {{ unClient.getId() }}</h2></p>
+    <p>{{ unClient.getPrenomCli() }} {{ unClient.getNomCLi() }}</p>
+    <p>{{ unCLient.getAdresseRue1Cli() }}
+        {% if unClient.getAdresseRue2Cli() %}
+        <p> {{ unClient.getAdresseRue2Cli() }}</p>
+    {% endif %}
+    <p>{{ unClient.getCpCli() }} {{ unClient.getVilleCli() }}</p>
+    <p>{{ unClient.getTelCli() }}</p>
+{% else %}
+{% endif %}
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+    <div class="text-center"> Fin de l'affichage </div>
+{% endblock %}

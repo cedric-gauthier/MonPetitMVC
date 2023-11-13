@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+    <head>
+        {% block header %} {% include 'header.html.twig' %} {% endblock %}
+    </head>
+    <body>
+        {% block navbar %}{% include 'navbar.html.twig' %}{% endblock %}
+        {% block contenu %}{% endblock %}
+    </body>
+    <footer>
+        {% block footer %} {% include 'footer.html.twig' %} {% endblock %}
+    </footer>
+</html>
