@@ -1,4 +1,4 @@
 <?php
 
 define ('APP_NAME', 'Module Gestion RH');
-define ('APP_USER', "MONTENOT Yann");
+define ('APP_USER', "GAUTHIER Cédric");

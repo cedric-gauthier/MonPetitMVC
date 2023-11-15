@@ -12,18 +12,7 @@ use App\Exceptions\AppException;
 
 class GestionClientModel {
 
-    public function find(int $id): Client {
-        try {
-            $unObjetPdo = Connexion::getConnexion();
-            $sql = "select * from CLIENT where id=:id";
-            $ligne = $unObjetPdo->prepare($sql);
-            $ligne->bindValue(':id', $id, PDO::PARAM_INT);
-            $ligne->execute();
-            return $ligne->fetchObject(Client::class);
-        } catch (Exception $ex) {
-            throw new AppException("Erreur technique inattendue");
-        }
-    }
+    
 
     public function findAll(): array {
         $unObjetPdo = Connexion::getConnexion();
@@ -32,21 +21,7 @@ class GestionClientModel {
         return $lignes->fetchAll(PDO::FETCH_CLASS, Client::class);
     }
 
-    public function findIds() {
-        try {
-            $unObjetPdo = Connexion::getConnexion();
-            $sql = "select id from CLIENT";
-            $lignes = $unObjetPdo->query($sql);
-            if ($lignes->rowCount() > 0) {
-                $t = $lignes->fetchAll(PDO::FETCH_ASSOC);
-                return $t;
-            } else {
-                throw new AppException('Aucun client trouvé');
-            }
-        } catch (PDOException) {
-            throw new AppException("Erreur technique inattendue");
-        }
-    }
+    
 
     public function enregistreClient(Client $client) {
         try {

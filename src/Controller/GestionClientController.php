@@ -8,20 +8,21 @@ use App\Model\GestionClientModel;
 use ReflectionClass;
 use App\Exceptions\AppException;
 use App\Entity\Client;
+use Tools\Repository;
 
 class GestionClientController {
 
     public function chercheUn(array $params) {
         // appel de la méthode find($id) de la classe Model adequate
-        $modele = new GestionClientModel();
+        $repository = Repository::getRepository("App\Entity\Client");
         // on récupère tous les id des clients
-        $ids = $modele->findIds();
+        $ids = $repository->findIds();
         // on place les id trouvés dans le tableau de paramètres à envoyer à la vue
         $params['lesId'] = $ids;
         // on test si l'id du client à chercher a été passé dans l'URL
         if (array_key_exists('id', $params)) {
             $id = filter_var(intval($params['id']), FILTER_VALIDATE_INT);
-            $unClient = $modele->find($id);
+            $unClient = $repository->find($id);
             if ($unClient) {
                 $params['unClient'] = $unClient;
             } else {
@@ -33,9 +34,12 @@ class GestionClientController {
         \Tools\MyTwig::afficheVue($vue, $params);
     }
 
-    public function chercheTous() {
-        $modele = new GestionClientModel();
-        $clients = $modele->findAll();
+    public function chercheTous(): void {
+        //$modele = new GestionClientModel();
+        //$clients = $modele->findAll();
+        // récupération d'un objet ClientRepository
+        $repository = Repository::getRepository("App\Entity\Client");
+        $clients = $repository->findAll();
         if ($clients) {
             $r = new ReflectionClass($this);
             $vue = str_replace('Controller', 'View', $r->getShortName() . "/tousClients.html.twig");
