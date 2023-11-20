@@ -9,7 +9,7 @@ namespace Tools;
  */
 abstract class MyTwig {
 
-    private static function getLoeader() {
+    private static function getLoader() {
 
         $loader = new \Twig\Loader\FilesystemLoader(PATH_VIEW);
         $environmentTwig = new \Twig\Environment($loader, [
@@ -21,7 +21,7 @@ abstract class MyTwig {
     }
 
     public static function afficheVue($vue, $params) {
-        $twig = self::getLoeader();
+        $twig = self::getLoader();
         $template = $twig->load($vue);
         echo $template->render($params);
     }

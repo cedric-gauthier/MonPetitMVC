@@ -11,7 +11,6 @@ use App\Entity\Client;
 use Tools\Repository;
 
 class GestionClientController {
-
     public function chercheUn(array $params) {
         // appel de la méthode find($id) de la classe Model adequate
         $repository = Repository::getRepository("App\Entity\Client");

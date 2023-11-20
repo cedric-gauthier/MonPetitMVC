@@ -3,6 +3,7 @@ declare (strict_types=1);
 namespace Tools;
 
 use PDO;
+use App\Entity\Commande;
 use App\Entity\Client;
 use Exceptions;
 use App\Exceptions\AppException;
@@ -37,7 +38,7 @@ abstract class Repository{
     public function findIds() : array {
         try {
             $unObjetPdo = Connexion::getConnexion();
-            $sql = "select id from CLIENT";
+            $sql = "select id from " . $this->table;
             $lignes = $unObjetPdo->query($sql);
             if ($lignes->rowCount() > 0) {
                 $t = $lignes->fetchAll(PDO::FETCH_ASSOC);
@@ -50,14 +51,14 @@ abstract class Repository{
         }
     }
     
-    public function find(int $id): Client {
+    public function find(int $id): ?object {
         try {
             $unObjetPdo = Connexion::getConnexion();
-            $sql = "select * from CLIENT where id=:id";
+            $sql = "select * from " . $this->table . " where id=:id";
             $ligne = $unObjetPdo->prepare($sql);
             $ligne->bindValue(':id', $id, PDO::PARAM_INT);
             $ligne->execute();
-            return $ligne->fetchObject(Client::class);
+            return $ligne->fetchObject($this->classNameLong);
         } catch (Exception $ex) {
             throw new AppException("Erreur technique inattendue");
         }
