@@ -9,19 +9,21 @@ use App\Model\GestionCommandeModel;
 use ReflectionClass;
 use App\Exceptions\AppException;
 use App\Entity\Commande;
+use App\Entity\Client;
 
 class GestionCommandeController {
 
     public function chercheUne(array $params) {
         // appel de la méthode find($id) de la classe Model adequate
         $repository = Repository::getRepository("App\Entity\Commande");
+        $repositoryClient = Repository::getRepository("App\Entity\Client");
         $ids = $repository->findIds();
         $params['lesId'] = $ids;
         if (array_key_exists('id', $params)) {
             $id = filter_var(intval($params['id']), FILTER_VALIDATE_INT);
             $uneCommande = $repository->find($id);
             if ($uneCommande) {
-                $unClient = $repository->find($uneCommande['idClient']);
+                $unClient = $repositoryClient->findClientCommande($id);
                 $params['unClient'] = $unClient;
                 $params['uneCommande'] = $uneCommande;
             } else {

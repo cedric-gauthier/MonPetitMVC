@@ -63,6 +63,59 @@ abstract class Repository{
             throw new AppException("Erreur technique inattendue");
         }
     }
+    
+    public function findClientCommande(int $id): Client {
+        try {
+            $unObjetPdo = Connexion::getConnexion();
+            $sql = "select client.id as idClient "
+                    . "commande.dateCde as dateCde "
+                    . "commande.noFacture as noFacture "
+                    . "client.nom as nomCli "
+                    . ""
+                    . "from client "
+                    . "inner join commande "
+                    . "on client.id = commande.idclient "
+                    . "where commande.id=:id";
+            $ligne = $unObjetPdo->prepare($sql);
+            $ligne->bindValue(':id', $id, PDO::PARAM_INT);
+            $ligne->execute();
+            return $ligne->fetchObject(Client::class);
+        } catch (Exception $ex) {
+            throw new AppException("Erreur technique inattendue");
+        }
+    }
+    
+    public function __call(string $methode, array $params) :array{
+        if (preg_match("#^findBy#", $methode)){
+            return $this->traiteFindBy($methode, array_values($params[0]));
+        }
+    }
+    
+    private function traiteFindBy($methode, $params){
+        $criteres = str_replace("findBy", "", $methode);
+        $criteres = explode("_and_", $criteres);
+        if (count($criteres) > 0 ){
+            $sql = 'select * from ' . $this->table . " where ";
+            $pasPremier = false;
+            foreach ($criteres as $critere){
+                if ($pasPremier){
+                    $sql .= ' and ';
+                }
+                $sql .= $critere . " = ? ";
+                $pasPremier = true;
+            }
+            $lignes = $this->connexion->prepare($sql);
+            $lignes->execute($params);
+            $lignes->setFetchMode(PDO::FETCH_CLASS, $this->classNameLong, null);
+            return $lignes->fetchAll();
+        }
+    }
+    
+    public function findColumnDistinctValues(string $colonne) :array {
+        $sql = "select distinct " . $colonne . " libelle from " . $this->table . " order by 1";
+        $tab = $this->connexion->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+        return $tab;
+    }
 }
 
 
